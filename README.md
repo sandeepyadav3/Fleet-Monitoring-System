@@ -211,21 +211,6 @@ In-cluster DNS replaces `localhost` (`amqp://fleet:fleet@rabbitmq:5672/` — Rab
 
 ---
 
-## What this demonstrates
-
-Useful as résumé / portfolio talking points (backed by code in this repo):
-
-- Service boundaries around **ingest**, **async processing**, and **read models** rather than a single CRUD app
-- **Backpressure isolation** with HTTP 202 and a durable work queue
-- **Delivery semantics** (manual ack, poison-message handling, idempotent live state vs append-only history)
-- **Connection lifecycle** (FastAPI lifespan pools, worker reconnect with backoff)
-- **Hot/cold data split** (Redis O(fleet) vs Mongo O(events))
-- Realtime UI over WebSockets with **diffed** payloads, not full-state spam
-- Next.js + Leaflet **SSR constraints** handled deliberately
-- Kubernetes **Kustomize** overlay for k3d: StatefulSets vs Deployments, probes, ConfigMaps, Ingress path routing
-
----
-
 ## Production follow-ups (not in this repo)
 
 The Compose and k3d stacks are laptop-sized. A production cut would add auth on ingest and WS, TLS on Ingress, TTL on Redis keys so silent vehicles leave the map, a Mongo TTL/time-series retention policy, structured tracing across publish → consume → persist, and replacing SCAN polling with Redis pub/sub or keyspace notifications at larger fleet sizes.
