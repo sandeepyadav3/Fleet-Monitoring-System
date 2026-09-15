@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: simulator
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: simulator
+  template:
+    metadata:
+      labels:
+        app: simulator
+    spec:
+      initContainers:
+        - name: wait-ingestion
+          image: busybox:1.36
+          command:
+            ["sh", "-c", "until nc -z ingestion 80; do echo waiting; sleep 2; done"]
+      containers:
+        - name: simulator
+          image: fleet/ingestion:local
+          imagePullPolicy: IfNotPresent
+          command: ["python", "-u", "simulator.py"]
+          envFrom:
+            - configMapRef:
+                name: fleet-config
+          resources:
+            requests:
+              cpu: 25m
+              memory: 32Mi
+            limits:
+              memory: 128Mi

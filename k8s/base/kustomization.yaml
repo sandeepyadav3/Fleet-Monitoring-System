@@ -1,0 +1,21 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: fleet
+
+resources:
+  - namespace.yaml
+  - configmap.yaml
+  - mongodb.yaml
+  - redis.yaml
+  - rabbitmq.yaml
+  - ingestion.yaml
+  - worker.yaml
+  - websocket.yaml
+  - frontend.yaml
+  - simulator.yaml
+
+labels:
+  - pairs:
+      app.kubernetes.io/part-of: fleet-monitoring
+    includeSelectors: false
